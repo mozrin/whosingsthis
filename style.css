@@ -1,0 +1,236 @@
+:root {
+    --primary: #6c63ff;
+    --secondary: #03dac6;
+    --bg-dark: #0a0e21;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-container {
+    width: 100%;
+    height: 100%;
+    background-image: url('/home/mozrin/.gemini/antigravity/brain/fcfc4109-e06f-41e9-bc49-ae61fb7ae4a0/app_background_neon_1777651124710.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Use the generated image if possible (simulated here) */
+.app-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(108, 99, 255, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.glass-hub {
+    width: 380px; /* Standard mobile width */
+    height: 760px; /* Standard mobile height */
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    border: 8px solid rgba(255, 255, 255, 0.1); /* Phone bezel */
+    border-radius: 60px; /* Rounded mobile corners */
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+    z-index: 10;
+    position: relative;
+}
+
+/* Phone Notch */
+.glass-hub::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 150px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 20px 20px;
+}
+
+header {
+    text-align: center;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(to right, #fff, #a29bfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tagline {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 5px;
+    margin-top: 5px;
+}
+
+.visualizer-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#waveform {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    bottom: 0;
+    opacity: 0.5;
+}
+
+.listening-circle {
+    width: 180px;
+    height: 180px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.listening-circle:hover {
+    transform: scale(1.05);
+}
+
+.listening-circle:active {
+    transform: scale(0.95);
+}
+
+.inner-circle {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(108, 99, 255, 0.4);
+    z-index: 5;
+}
+
+.mic-icon, .music-icon {
+    width: 60px;
+    height: 60px;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Pulsing Rings Animation */
+.pulse-rings .ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    border: 2px solid rgba(108, 99, 255, 0.3);
+    border-radius: 50%;
+    animation: ripple 2s infinite;
+    opacity: 0;
+}
+
+.pulse-rings .ring:nth-child(2) { animation-delay: 0.6s; }
+.pulse-rings .ring:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes ripple {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+.status-panel {
+    text-align: center;
+}
+
+#status-text {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: white;
+    opacity: 0.7;
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 25px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.album-art {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(45deg, #333, #666);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.album-art i { width: 30px; height: 30px; color: rgba(255,255,255,0.3); }
+
+.track-info h2 { font-size: 1.2rem; font-weight: 900; }
+.track-info p { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+.spotify-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    background: #1db954;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    width: fit-content;
+}
+
+footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+}

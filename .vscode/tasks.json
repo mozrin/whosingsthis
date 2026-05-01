@@ -1,0 +1,85 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Client (Web)",
+            "type": "shell",
+            "command": "flutter run -d web-server --web-port 8081 --web-hostname 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/client"
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                "$dart-sdk"
+            ]
+        },
+        {
+            "label": "Run Client (Linux)",
+            "type": "shell",
+            "command": "flutter run -d linux",
+            "options": {
+                "cwd": "${workspaceFolder}/client"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build Client (Linux)",
+            "type": "shell",
+            "command": "flutter build linux",
+            "options": {
+                "cwd": "${workspaceFolder}/client"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build Client (Web)",
+            "type": "shell",
+            "command": "flutter build web",
+            "options": {
+                "cwd": "${workspaceFolder}/client"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$dart-sdk"
+            ]
+        },
+        {
+            "label": "DB: Setup PostgreSQL",
+            "type": "shell",
+            "command": "cd infrastructure && docker-compose up -d",
+            "group": "build"
+        },
+        {
+            "label": "Project: Clean & Fetch Deps",
+            "type": "shell",
+            "command": "cd client && flutter clean && flutter pub get && cd ../server && dart pub get",
+            "group": "build"
+        },
+        {
+            "label": "Run Server",
+            "type": "shell",
+            "command": "dart bin/server.dart",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                "$dart-sdk"
+            ]
+        },
+        {
+            "label": "Start All Services",
+            "dependsOn": [
+                "Run Server",
+                "Run Client (Linux)"
+            ],
+            "group": "build"
+        }
+    ]
+}

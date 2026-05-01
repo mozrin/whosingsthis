@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "WhoSingsThis (Linux)",
+            "request": "launch",
+            "type": "dart",
+            "program": "client/lib/main.dart",
+            "args": ["-d", "linux"]
+        },
+        {
+            "name": "WhoSingsThis Backend",
+            "request": "launch",
+            "type": "dart",
+            "program": "server/bin/server.dart"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": [
+                "WhoSingsThis Backend",
+                "WhoSingsThis (Linux)"
+            ]
+        }
+    ]
+}

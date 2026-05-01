@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhoSingsThis | Premium Music Recognition</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Background Overlay -->
+        <div class="bg-glow"></div>
+        
+        <!-- Main Content -->
+        <main class="glass-hub">
+            <header>
+                <h1 class="logo">WhoSingsThis</h1>
+                <p class="tagline">IDENTIFY ANY SONG INSTANTLY</p>
+            </header>
+
+            <div class="visualizer-container">
+                <canvas id="waveform"></canvas>
+                <div class="listening-circle" id="listen-btn">
+                    <div class="pulse-rings">
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                    </div>
+                    <div class="inner-circle">
+                        <i data-lucide="mic" class="mic-icon"></i>
+                        <i data-lucide="music" class="music-icon hidden"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-panel">
+                <p id="status-text">TAP TO IDENTIFY</p>
+            </div>
+
+            <div id="result-card" class="result-card hidden">
+                <div class="album-art">
+                    <i data-lucide="disc"></i>
+                </div>
+                <div class="track-info">
+                    <h2 id="track-title">Blinding Lights</h2>
+                    <p id="track-artist">The Weeknd</p>
+                    <div class="spotify-link">
+                        <i data-lucide="play-circle"></i>
+                        <span>OPEN IN SPOTIFY</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <span>POWERED BY ACOUSTID & ANTIGRAVITY</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
