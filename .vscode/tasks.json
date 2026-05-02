@@ -2,64 +2,66 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Client (Web)",
-            "type": "shell",
-            "command": "flutter run -d web-server --web-port 8081 --web-hostname 0.0.0.0",
-            "options": {
-                "cwd": "${workspaceFolder}/client"
-            },
-            "isBackground": true,
-            "problemMatcher": [
-                "$dart-sdk"
-            ]
-        },
-        {
-            "label": "Run Client (Linux)",
+            "label": "🚀 Run WhoSingsThis (Linux)",
             "type": "shell",
             "command": "flutter run -d linux",
             "options": {
                 "cwd": "${workspaceFolder}/client"
             },
-            "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
-            "label": "Build Client (Linux)",
+            "label": "📦 Build Linux Release",
             "type": "shell",
             "command": "flutter build linux",
             "options": {
                 "cwd": "${workspaceFolder}/client"
             },
-            "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
-            "label": "Build Client (Web)",
+            "label": "📱 Build Android APK",
             "type": "shell",
-            "command": "flutter build web",
+            "command": "flutter build apk --debug",
             "options": {
                 "cwd": "${workspaceFolder}/client"
             },
-            "group": "build",
-            "problemMatcher": [
-                "$dart-sdk"
-            ]
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
-            "label": "DB: Setup PostgreSQL",
+            "label": "🌐 Launch Web Preview",
             "type": "shell",
-            "command": "cd infrastructure && docker-compose up -d",
-            "group": "build"
+            "command": "npx serve -l 8000 .",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
-            "label": "Project: Clean & Fetch Deps",
+            "label": "🧹 Project: Reset (Clean & Fetch)",
             "type": "shell",
-            "command": "cd client && flutter clean && flutter pub get && cd ../server && dart pub get",
-            "group": "build"
+            "command": "cd client && flutter clean && flutter pub get",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
             "label": "Run Server",
@@ -69,17 +71,7 @@
                 "cwd": "${workspaceFolder}/server"
             },
             "isBackground": true,
-            "problemMatcher": [
-                "$dart-sdk"
-            ]
-        },
-        {
-            "label": "Start All Services",
-            "dependsOn": [
-                "Run Server",
-                "Run Client (Linux)"
-            ],
-            "group": "build"
+            "problemMatcher": []
         }
     ]
 }

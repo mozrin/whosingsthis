@@ -25,34 +25,35 @@ static void my_application_activate(GApplication* application) {
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
-  // Use a header bar when running in GNOME as this is the common style used
-  // by applications and is the setup most users will be using (e.g. Ubuntu
-  // desktop).
-  // If running on X and not using GNOME then just use a traditional title bar
-  // in case the window manager does more exotic layout, e.g. tiling.
-  // If running on Wayland assume the header bar will work (may need changing
-  // if future cases occur).
-  gboolean use_header_bar = TRUE;
-#ifdef GDK_WINDOWING_X11
-  GdkScreen* screen = gtk_window_get_screen(window);
-  if (GDK_IS_X11_SCREEN(screen)) {
-    const gchar* wm_name = gdk_x11_screen_get_window_manager_name(screen);
-    if (g_strcmp0(wm_name, "GNOME Shell") != 0) {
-      use_header_bar = FALSE;
-    }
-  }
-#endif
-  if (use_header_bar) {
-    GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
-    gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "client");
-    gtk_header_bar_set_show_close_button(header_bar, TRUE);
-    gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
-  } else {
-    gtk_window_set_title(window, "client");
+  // Set window geometry and style for a mobile-like experience on Linux
+  GdkDisplay* display = gdk_display_get_default();
+  GdkMonitor* monitor = gdk_display_get_primary_monitor(display);
+  
+  // Fallback to first monitor if primary is not found (common in some setups)
+  if (monitor == nullptr) {
+    monitor = gdk_display_get_monitor(display, 0);
   }
 
-  gtk_window_set_default_size(window, 1280, 720);
+  int window_width = 360;
+  int window_height = 640;
+
+  if (monitor != nullptr) {
+    GdkRectangle geometry;
+    gdk_monitor_get_geometry(monitor, &geometry);
+
+    // Height is 80% of display height
+    window_height = geometry.height * 0.8;
+    // Width follows 9:16 aspect ratio
+    window_width = (window_height * 9) / 16;
+  }
+
+  gtk_window_set_default_size(window, window_width, window_height);
+  gtk_window_set_resizable(window, FALSE);
+  gtk_window_set_decorated(window, FALSE);
+  
+  // Center the window horizontally
+  // We can use GTK_WIN_POS_CENTER for simplicity as it covers horizontal centering
+  gtk_window_set_position(window, GTK_WIN_POS_CENTER);
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(

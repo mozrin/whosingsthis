@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -11,79 +12,86 @@ class HomeScreen extends StatelessWidget {
     final provider = Provider.of<RecognitionProvider>(context);
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment.center,
-            radius: 1.2,
-            colors: [Color(0xFF1D1E33), Color(0xFF0A0E21)],
-          ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              // Background Ambient Glow
-              _buildAmbientGlow(),
-
-              // Header
-              Positioned(
-                top: 60,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Column(
-                    children: [
-                      const Text(
-                        'WhoSingsThis',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          letterSpacing: -1,
-                        ),
-                      ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2, end: 0),
-                      const SizedBox(height: 8),
-                      Container(
-                        height: 2,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF6C63FF), Color(0xFF03DAC6)],
-                          ),
-                          borderRadius: BorderRadius.circular(1),
-                        ),
-                      ).animate().scaleX(duration: 1000.ms, curve: Curves.easeOut),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Main Content
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildStatusText(provider),
-                    const SizedBox(height: 50),
-                    _buildListenButton(context, provider),
-                    const SizedBox(height: 50),
-                    if (provider.isRecording)
-                       _buildWaveform().animate().fadeIn(),
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          // Ambient background
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E1E2E),
+                    Color(0xFF0F172A),
                   ],
                 ),
               ),
-
-              // Results Card
-              if (provider.result != null)
-                Positioned(
-                  bottom: 50,
-                  left: 20,
-                  right: 20,
-                  child: _buildResultCard(context, provider),
-                ),
-            ],
+            ),
           ),
-        ),
+
+          // Background Ambient Glow
+          _buildAmbientGlow(),
+
+          // Discreet Exit Button (Top Right)
+          Positioned(
+            top: 40,
+            right: 20,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white24, size: 24),
+              onPressed: () => exit(0),
+              tooltip: 'Close App',
+            ),
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 60),
+                  const Text(
+                    'WhoSingsThis',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 40,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: Colors.cyan,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ).animate().fadeIn(delay: 400.ms),
+                  
+                  const Spacer(),
+                  
+                  _buildStatusText(provider),
+                  const SizedBox(height: 50),
+                  _buildListenButton(context, provider),
+                  const SizedBox(height: 50),
+                  if (provider.isRecording)
+                    _buildWaveform().animate().fadeIn(),
+                  
+                  const Spacer(),
+                  
+                  // Results Card
+                  if (provider.result != null)
+                    _buildResultCard(context, provider),
+                  
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -99,7 +107,7 @@ class HomeScreen extends StatelessWidget {
             height: 300,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF6C63FF).withValues(alpha: 0.15),
+              color: const Color(0xFF6C63FF).withValues(alpha: 0.1),
             ),
           ).animate(onPlay: (c) => c.repeat(reverse: true))
            .scale(begin: const Offset(1,1), end: const Offset(1.5, 1.5), duration: 4000.ms),
@@ -209,11 +217,12 @@ class HomeScreen extends StatelessWidget {
       children: [
         Text(
           text.toUpperCase(),
+          textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
             color: Colors.white54,
-            letterSpacing: 4,
+            letterSpacing: 2,
           ),
         ).animate(key: ValueKey(text)).fadeIn().slideY(begin: 0.1, end: 0),
       ],
@@ -222,54 +231,56 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildResultCard(BuildContext context, RecognitionProvider provider) {
     final result = provider.result!;
+    if (result['error_detail'] != null) return const SizedBox.shrink();
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.white24, width: 1),
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white10, width: 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF6C63FF), Color(0xFF03DAC6)],
               ),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.album, size: 40, color: Colors.white),
+            child: const Icon(Icons.album, size: 30, color: Colors.white),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   result['title'] ?? 'Unknown Track',
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   result['artist'] ?? 'Unknown Artist',
-                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                  style: const TextStyle(fontSize: 14, color: Colors.white60),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1DB954),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.play_arrow, size: 16, color: Colors.white),
+                      Icon(Icons.play_arrow, size: 12, color: Colors.white),
                       SizedBox(width: 4),
-                      Text('PLAY ON SPOTIFY', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                      Text('PLAY ON SPOTIFY', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),

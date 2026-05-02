@@ -57,7 +57,9 @@ class RecognitionProvider with ChangeNotifier {
       }
     } catch (e) {
       _status = 'error';
-      _result = {'error_detail': 'Missing system dependencies (PulseAudio/parecord)'};
+      _result = {
+        'error_detail': 'MISSING SYSTEM DEPENDENCIES\nRun: sudo apt-get install pulseaudio-utils'
+      };
       _isRecording = false;
       notifyListeners();
     }
